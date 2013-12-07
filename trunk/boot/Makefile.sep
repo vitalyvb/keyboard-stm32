@@ -1,0 +1,43 @@
+TOPDIR=../
+include $(TOPDIR)config.mk
+
+BIN=boot
+STARTUP=$(TOPDIR)device_support/gcc/startup_stm32f10x_md.s
+
+CFLAGS+=-c
+CFLAGS+=-DBOOTLOADER
+
+LDFLAGS+=-Wl,-Map,$(BIN).map
+LDFLAGS+=-Wl,-T,$(TOPDIR)device_support/gcc/stm32f103_64k_20k_boot.ld
+
+OBJS := startup.o \
+	dfu_mal.o \
+	flash_if.o \
+	hw_config.o \
+	main.o \
+	main_dfukbd.o \
+	matrix.o \
+	stm32_it.o \
+	usb_endp.o \
+	usb_istr.o \
+	usb_prop.o \
+	usb_pwr.o
+
+all: $(BIN).elf $(BIN).lst $(BIN).hex $(BIN).bin
+	$(SIZE) -B $(BIN).elf
+
+include $(TOPDIR)libs/stm32_usb-fs/Makefile.inc.mk
+
+startup.o: $(STARTUP)
+	$(AS) $(ASFLAGS) $(STARTUP) -o $@
+
+$(BIN).elf: $(OBJS)
+	$(CC) $(OBJS) $(LDFLAGS) $(LDLIBS_PATH) -lhw -lcmsis -lstm32_lib -llibc -o $@
+
+.PHONY: clean
+
+clean:
+	rm -f 	$(OBJS) \
+		$(BIN).map \
+		$(BIN).lst \
+		$(BIN).elf
