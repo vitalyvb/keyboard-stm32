@@ -1,0 +1,44 @@
+
+kbd matrix with diodes
+
+------------------------------------
+
+PA0	In-R0		3.3V
+PA1	In-R1		3.3V
+PA2	In-R2		3.3V
+PA3	In-R3		3.3V
+PA4	In-R4		3.3V
+PA5	In-R5		3.3V
+PA6	In-R6		3.3V
+PA7	In-R7		3.3V
+
+PA8	LED+		TIM1_CH1
+PA9	LED-num		Serial		(resistor required)
+PA10	LED-scr		Serial		(resistor required)
+PA11			USB
+PA12			USB
+PA13	LED-caps	JTAG(SW)	(resistor required)
+PA14	Out-C0		JTAG(SW)
+PA15	Out-C1		JTAG
+
+PB0	Out-C2		3.3V
+PB1	Out-C3		3.3V
+PB2	Out-C4		BOOT1		(no pull resistors during normal operation)
+PB3	Out-C5		JTAG
+PB4	Out-C6		JTAG
+PB5	Out-C7		3.3V
+PB6			I2C1
+PB7			I2C1
+PB8	Out-C8
+PB9	Out-C9
+PB10	Out-C10
+PB11	Out-C11
+PB12	Out-C12
+PB13	Out-C13
+PB14	Out-C14
+PB15	Out-C15
+
+PC13	-		3.3V, low load
+PC14	-		3.3V, low load
+PC15	-		3.3V, low load
+
