@@ -73,7 +73,7 @@ void __attribute__((noinline, noreturn)) start_app(void *address)
 {
     register void (*proc)(void);
 
-    proc = address + sizeof(void*);
+    proc = *(void(**)())(address + sizeof(void*));
 
     /* Initialize application's Stack Pointer */
     __set_MSP(*(__IO uint32_t*) address);
