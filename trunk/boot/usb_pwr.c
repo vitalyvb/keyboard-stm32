@@ -121,8 +121,8 @@ void Suspend(void)
 	uint32_t tmpreg = 0;
   __IO uint32_t savePWR_CR=0;
 	/* suspend preparation */
-	/* ... */
-	
+	Prepare_LowPowerMode();
+
 	/*Store CNTR value */
 	wCNTR = _GetCNTR();  
 

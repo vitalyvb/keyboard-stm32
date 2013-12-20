@@ -186,7 +186,48 @@ void USB_LP_CAN1_RX0_IRQHandler(void)
 
 void EXTI0_IRQHandler(void)
 {
+    EXTI_ClearITPendingBit(EXTI_Line0);
+    kbd_handle_exti_interrupt();
 }
+
+void EXTI1_IRQHandler(void)
+{
+    EXTI_ClearITPendingBit(EXTI_Line1);
+    kbd_handle_exti_interrupt();
+}
+
+void EXTI2_IRQHandler(void)
+{
+    EXTI_ClearITPendingBit(EXTI_Line2);
+    kbd_handle_exti_interrupt();
+}
+
+void EXTI3_IRQHandler(void)
+{
+    EXTI_ClearITPendingBit(EXTI_Line3);
+    kbd_handle_exti_interrupt();
+}
+
+void EXTI4_IRQHandler(void)
+{
+    EXTI_ClearITPendingBit(EXTI_Line4);
+    kbd_handle_exti_interrupt();
+}
+
+void EXTI9_5_IRQHandler(void)
+{
+    /* assume only keyboard can be an interrupt source */
+    EXTI_ClearITPendingBit(EXTI_Line5|EXTI_Line6|EXTI_Line7|EXTI_Line8|EXTI_Line9);
+    kbd_handle_exti_interrupt();
+}
+
+void EXTI15_10_IRQHandler(void)
+{
+    /* assume only keyboard can be an interrupt source */
+    EXTI_ClearITPendingBit(EXTI_Line10|EXTI_Line11|EXTI_Line12|EXTI_Line13|EXTI_Line14|EXTI_Line15);
+    kbd_handle_exti_interrupt();
+}
+
 
 /*******************************************************************************
 * Function Name  : USB_FS_WKUP_IRQHandler

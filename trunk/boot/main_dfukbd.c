@@ -40,6 +40,7 @@ uint8_t DeviceState;
 uint8_t DeviceStatus[6];
 
 __IO uint32_t tick_counter;
+__IO uint8_t do_usb_resume;
 
 #define REPORT_STATUS_NO 0
 #define REPORT_STATUS_PROC 1
@@ -50,6 +51,8 @@ __IO uint8_t kbd_report_status;
 __IO uint8_t kbd_report_scanning[KBD_SIZE];
 __IO uint8_t kbd_report_fullscan[KBD_SIZE];
 __IO uint32_t usb_report_sent;
+__IO uint32_t usb_report_idle;
+__IO uint32_t usb_report_idle_timer;
 
 #define LEDS_OVERRIDE_NONE (0)
 #define LEDS_OVERRIDE_STARTUP (1)
@@ -75,7 +78,12 @@ void set_usb_kbd_leds(uint8_t leds)
 
 void set_usb_kbd_idle(uint32_t idle)
 {
-    /* XXX todo */
+    __disable_irq();
+
+    usb_report_idle = idle;
+    usb_report_idle_timer = idle;
+
+    __enable_irq();
 }
 
 void kbd_suspend()
@@ -90,12 +98,22 @@ void kbd_suspend()
     }
 
     matrix_unselect_cols();
+    matrix_idle_wakeup_event_enter();
 }
 
 void kbd_resume()
 {
+    matrix_idle_wakeup_event_leave();
     set_usb_kbd_leds(leds_real_status);
     matrix_scan_start();
+}
+
+void kbd_handle_exti_interrupt()
+{
+    do_usb_resume = 1;
+    /* do not suspend here: high priority interrupt,
+     * will be impossible to wakeup
+     */
 }
 
 void handle_leds_override()
@@ -202,6 +220,20 @@ void dfu_main(void)
     send_report = 0;
     while (1){
 
+	if (unlikely(do_usb_resume)){
+	    do_usb_resume = 0;
+	    /* Check if the remote wakeup feature is enabled (it could be disabled
+	     * by the host through ClearFeature request)
+	     */
+	    if (pInformation->Current_Feature & 0x20) {
+		Resume(RESUME_INTERNAL);
+	    } else {
+		/* resume disabled, revert to suspend state */
+		Suspend();
+		continue;
+	    }
+	}
+
 	if (bDeviceState != CONFIGURED){
 	    __WFI(); /* Wait for interrupt */
 	    continue;
@@ -216,6 +248,10 @@ void dfu_main(void)
 	    kbd_report_status &= ~REPORT_STATUS_DONE;
 	    send_report = 1;
 	    memcpy((void*)kbd_report_loc, (void*)kbd_report_fullscan, KBD_SIZE);
+	}
+	if (unlikely((usb_report_idle_timer == 0) && (usb_report_idle != 0))){
+	    send_report = 1;
+	    usb_report_idle_timer = usb_report_idle;
 	}
 	__enable_irq();
 
@@ -350,5 +386,9 @@ void event_tick()
 
     if (unlikely(leds_ticks>0)){
 	leds_ticks--;
+    }
+
+    if (usb_report_idle_timer>0){
+	usb_report_idle_timer--;
     }
 }

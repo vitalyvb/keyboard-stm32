@@ -58,8 +58,8 @@ void matrix_init_all()
     GPIO_InitTypeDef GPIO_InitStructure;
     int i;
 
-    /* Cols - Hi-Z (Floating input)
-     * Rows - Input with weak pull-down
+    /* Cols - Open-drain output
+     * Rows - Input with weak pull-up
      */
 
     /* configure PA0-PA7 as ROW input */
@@ -68,38 +68,37 @@ void matrix_init_all()
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
     GPIO_Init(GPIOA, &GPIO_InitStructure);
 
-    /* configure COLs as inputs (not selected) */
+    /* configure COLs as outputs, set level Hi */
     for (i=0;i<MATRIX_COLS;i++){
 	GPIO_InitStructure.GPIO_Pin = column_portpins[i].pinmask;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD;
 	GPIO_Init(column_portpins[i].gpio, &GPIO_InitStructure);
+	GPIO_SetBits(column_portpins[i].gpio, column_portpins[i].pinmask);
     }
 
     prev_column_portpin = &column_portpins[0];
+
+    /* configure EXTI on ROWs to handle wakeup and
+     * resume from keypress
+     */
+
+    for (i=0;i<8;i++){
+	GPIO_EXTILineConfig(GPIO_PortSourceGPIOA, i);
+    }
+
 }
 
 /* may be called from interrupt */
 void matrix_select_col(uint32_t col)
 {
-    GPIO_InitTypeDef GPIO_InitStructure;
     const struct portpin *col_port;
 
-    /* unselect previous row, configure as floating input */
-    GPIO_InitStructure.GPIO_Pin = prev_column_portpin->pinmask;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-    GPIO_Init(prev_column_portpin->gpio, &GPIO_InitStructure);
+    /* unselect previous row, open-drain output, hi */
+    GPIO_SetBits(prev_column_portpin->gpio, prev_column_portpin->pinmask);
 
-
-    /* select row, configure as high output */
+    /* select row, open-drain output, low */
     col_port = &column_portpins[col];
-
-    GPIO_InitStructure.GPIO_Pin = col_port->pinmask;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-    GPIO_Init(col_port->gpio, &GPIO_InitStructure);
-
     GPIO_ResetBits(col_port->gpio, col_port->pinmask);
 
     prev_column_portpin = col_port;
@@ -107,14 +106,8 @@ void matrix_select_col(uint32_t col)
 
 void matrix_unselect_cols()
 {
-    GPIO_InitTypeDef GPIO_InitStructure;
-
-    /* unselect previous row, configure as floating input */
-    GPIO_InitStructure.GPIO_Pin = prev_column_portpin->pinmask;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-    GPIO_Init(prev_column_portpin->gpio, &GPIO_InitStructure);
-
+    /* unselect previous row, open-drain output, hi */
+    GPIO_SetBits(prev_column_portpin->gpio, prev_column_portpin->pinmask);
     prev_column_portpin = &column_portpins[0];
 }
 
@@ -124,3 +117,75 @@ uint32_t matrix_read_rows()
     return (~GPIO_ReadInputData(GPIOA)) & ((1<<MATRIX_ROWS)-1);
 }
 
+
+void matrix_idle_wakeup_event_enter()
+{
+    EXTI_InitTypeDef EXTI_InitStructure;
+    NVIC_InitTypeDef NVIC_InitStructure;
+    int i;
+    const int ints_list[] = {EXTI0_IRQn, EXTI1_IRQn, EXTI2_IRQn, EXTI3_IRQn,
+			EXTI4_IRQn, EXTI9_5_IRQn};
+
+    /* Configure EXTIn lines */
+    EXTI_InitStructure.EXTI_Line = EXTI_Line0|EXTI_Line1|EXTI_Line2|EXTI_Line3|
+				   EXTI_Line4|EXTI_Line5|EXTI_Line6|EXTI_Line7;
+    EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
+    EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling;
+    EXTI_InitStructure.EXTI_LineCmd = ENABLE;
+    EXTI_Init(&EXTI_InitStructure);
+
+    /* set COLs Low */
+    for (i=0;i<MATRIX_COLS;i++){
+	GPIO_ResetBits(column_portpins[i].gpio, column_portpins[i].pinmask);
+    }
+
+    EXTI_ClearFlag(EXTI_Line0|EXTI_Line1|EXTI_Line2|EXTI_Line3|
+		   EXTI_Line4|EXTI_Line5|EXTI_Line6|EXTI_Line7);
+
+    /* Enable and set Interrupts to the lowest priority */
+    for (i=0;i<sizeof(ints_list)/sizeof(ints_list[0]);i++){
+	/* If controller is STOPped from the interrupt (most likely it is,
+	 * from USB low priority interrupt) then wakeup EXTI interrupts
+	 * must have higher priority to trigger wakeup.
+	 * Assign highest possible priority here.
+	 */
+	NVIC_InitStructure.NVIC_IRQChannel = ints_list[i];
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+	NVIC_Init(&NVIC_InitStructure);
+    }
+}
+
+void matrix_idle_wakeup_event_leave()
+{
+    EXTI_InitTypeDef EXTI_InitStructure;
+    int i;
+
+    /* set COLs Hi */
+    for (i=0;i<MATRIX_COLS;i++){
+	GPIO_SetBits(column_portpins[i].gpio, column_portpins[i].pinmask);
+    }
+
+    /* Configure EXTIn lines */
+    EXTI_InitStructure.EXTI_Line = EXTI_Line0|EXTI_Line1|EXTI_Line2|EXTI_Line3|
+				   EXTI_Line4|EXTI_Line5|EXTI_Line6|EXTI_Line7;
+    EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
+    EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling;
+    EXTI_InitStructure.EXTI_LineCmd = DISABLE;
+    EXTI_Init(&EXTI_InitStructure);
+
+    NVIC_DisableIRQ(EXTI0_IRQn);
+    NVIC_DisableIRQ(EXTI1_IRQn);
+    NVIC_DisableIRQ(EXTI2_IRQn);
+    NVIC_DisableIRQ(EXTI3_IRQn);
+    NVIC_DisableIRQ(EXTI4_IRQn);
+    NVIC_DisableIRQ(EXTI9_5_IRQn);
+
+    NVIC_ClearPendingIRQ(EXTI0_IRQn);
+    NVIC_ClearPendingIRQ(EXTI1_IRQn);
+    NVIC_ClearPendingIRQ(EXTI2_IRQn);
+    NVIC_ClearPendingIRQ(EXTI3_IRQn);
+    NVIC_ClearPendingIRQ(EXTI4_IRQn);
+    NVIC_ClearPendingIRQ(EXTI9_5_IRQn);
+}

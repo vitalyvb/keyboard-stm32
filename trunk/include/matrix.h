@@ -40,4 +40,7 @@ void matrix_scan_start();
 void matrix_scan_stop();
 void matrix_timer_interrupt();
 
+void matrix_idle_wakeup_event_leave();
+void matrix_idle_wakeup_event_enter();
+
 #endif /* MATRIX_H */
