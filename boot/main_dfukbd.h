@@ -36,4 +36,6 @@ void set_usb_kbd_idle(uint32_t idle);
 void dfu_main(void);
 void dfu_usb_reset(void);
 
+void kbd_handle_exti_interrupt();
+
 #endif /* DFU_KBD_H */

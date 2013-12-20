@@ -185,7 +185,7 @@ void Set_USBClock(void)
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
-void Enter_LowPowerMode(void)
+void Prepare_LowPowerMode(void)
 {
   /* Set the device state to suspend */
   bDeviceState = SUSPENDED;

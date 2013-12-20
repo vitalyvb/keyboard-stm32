@@ -38,6 +38,7 @@ void rcc_init()
     //RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
     //GPIO_PinRemapConfig(GPIO_Remap_SWJ_Disable, ENABLE);
 
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR, ENABLE);
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO | RCC_APB2Periph_GPIOA | HW_ENABLE_RCC_APB2_PERIPF, ENABLE);
 }
 
