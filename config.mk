@@ -25,7 +25,7 @@ CFLAGS=-mcpu=cortex-m3 -mtune=cortex-m3 -mfix-cortex-m3-ldrd
 CFLAGS+=-DSTM32F10X_MD -DHSE_VALUE=8000000 -DUSE_STDPERIPH_DRIVER
 CFLAGS+=-mthumb -D__thumb2__=1 -msoft-float
 CFLAGS+=-mno-sched-prolog -mapcs-frame
-CFLAGS+=-Os -fno-hosted
+CFLAGS+=-Os -fno-strict-aliasing -fno-hosted
 CFLAGS+=-Wall -Wno-unused-function 
 #-Wno-implicit-function-declaration
 CFLAGS+=-gdwarf-2 -g

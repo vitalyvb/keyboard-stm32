@@ -55,13 +55,17 @@ typedef enum _DEVICE_STATE
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 void Suspend(void);
+void Suspend_Low(void);
 void Resume_Init(void);
 void Resume(RESUME_STATE eResumeSetVal);
+void USB_Ctl_Reset(int in_interrupt);
 RESULT PowerOn(void);
 RESULT PowerOff(void);
 /* External variables --------------------------------------------------------*/
 extern  __IO uint32_t bDeviceState;             /* USB device status */
 extern __IO bool fSuspendEnabled;  /* true when suspend is possible */
+
+int usb_remote_wakeup_enabled();
 
 #endif  /*__USB_PWR_H*/
 

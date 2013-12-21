@@ -57,16 +57,6 @@ void DFU_write_crc (void);
 
 extern uint32_t Pointer;  /* Base Address to Erase, Program or Read */
 
-#define DFU_GetConfiguration          NOP_Process
-//#define DFU_SetConfiguration          NOP_Process
-#define DFU_GetInterface              NOP_Process
-#define DFU_SetInterface              NOP_Process
-#define DFU_GetStatus                 NOP_Process
-#define DFU_ClearFeature              NOP_Process
-#define DFU_SetEndPointFeature        NOP_Process
-#define DFU_SetDeviceFeature          NOP_Process
-//#define DFU_SetDeviceAddress          NOP_Process
-
 /*---------------------------------------------------------------------*/
 /*  DFU definitions                                                    */
 /*---------------------------------------------------------------------*/
