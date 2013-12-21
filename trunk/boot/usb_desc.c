@@ -12,11 +12,11 @@ const uint8_t DFU_DeviceDescriptor[USB_DEVICE_DESCRIPTOR_SIZE] = {
 	0x00,                        /* bDeviceClass : See interface */
 	0x00,                        /* bDeviceSubClass : See interface*/
 	0x00,                        /* bDeviceProtocol : See interface */
-	ENDP0_BUFSIZE,               /* bMaxPacketSize0 0x40 = 64 */
-	0x83,                        /* idVendor     (0483) */
-	0x04,
-	0x11,                        /* idProduct (0xDF11) DFU PiD*/
-	0xDF,
+	ENDP0_BUFSIZE,               /* bMaxPacketSize0 */
+	LSB(USBD_VID_DFU),           /* idVendor */
+	MSB(USBD_VID_DFU),
+	LSB(USBD_PID_DFU),           /* idProduct */
+	MSB(USBD_PID_DFU),
 	0x00,                        /* bcdDevice*/
 	0x02,
 
@@ -147,52 +147,28 @@ const struct ConfigDescriptorStruct DFU_ConfigDescriptor = {
     },
 };
 
-
-const uint8_t DFU_StringLangId[DFU_SIZ_STRING_LANGID] =
-{
-    DFU_SIZ_STRING_LANGID,
+const struct usb_string_descriptor DFU_StringLangId = {
+    sizeof(struct usb_string_descriptor) + sizeof(uint16_t),
     USB_STRING_DESCRIPTOR_TYPE,
-    0x09,
-    0x04    /* LangID = 0x0409: U.S. English */
+    { USBD_LANGID_STRING }			/* LangID */
 };
 
-const uint8_t DFU_StringVendor[DFU_SIZ_STRING_VENDOR] =
-{
-    DFU_SIZ_STRING_VENDOR,
+const struct usb_string_descriptor DFU_StringVendor = {
+    sizeof(struct usb_string_descriptor) + USBD_MANUFACTURER_STRING_LENGTH*2,
     USB_STRING_DESCRIPTOR_TYPE,
-    /* Manufacturer: "STMicroelectronics" */
-    'S', 0, 'T', 0, 'M', 0, 'i', 0, 'c', 0, 'r', 0, 'o', 0, 'e', 0,
-    'l', 0, 'e', 0, 'c', 0, 't', 0, 'r', 0, 'o', 0, 'n', 0, 'i', 0,
-    'c', 0, 's', 0
+    { USBD_MANUFACTURER_STRING },
 };
 
-const uint8_t DFU_StringProduct[DFU_SIZ_STRING_PRODUCT] =
-{
-    DFU_SIZ_STRING_PRODUCT,
+const struct usb_string_descriptor DFU_StringProduct = {
+    sizeof(struct usb_string_descriptor) + USBD_PRODUCT_STRING_LENGTH*2,
     USB_STRING_DESCRIPTOR_TYPE,
-    /* Product name: "STM32 DFU" */
-    'S', 0, 'T', 0, 'M', 0, '3', 0, '2', 0, ' ', 0, 'D', 0, 'F', 0, 'U', 0
+    { USBD_PRODUCT_STRING },
 };
 
-uint8_t DFU_StringSerial[DFU_SIZ_STRING_SERIAL] =
-{
-    DFU_SIZ_STRING_SERIAL,
+const struct usb_string_descriptor DFU_StringInterface0 = {
+    sizeof(struct usb_string_descriptor) + USBD_INTERFACE0_STRING_LENGTH*2,
     USB_STRING_DESCRIPTOR_TYPE,
-    /* Serial number */
-    'S', 0, 'T', 0, 'M', 0, '3', 0, '2', 0  
+    { USBD_INTERFACE0_STRING },
 };
 
-const uint8_t DFU_StringInterface0[DFU_SIZ_STRING_INTERFACE0] =
-{
-    DFU_SIZ_STRING_INTERFACE0,
-    USB_STRING_DESCRIPTOR_TYPE,
-    // Interface 0: "@Internal Flash   /0x08000000/12*001Ka,116*001Kg"
-    '@', 0, 'I', 0, 'n', 0, 't', 0, 'e', 0, 'r', 0, 'n', 0, 'a', 0, 'l', 0,  /* 18 */
-    ' ', 0, 'F', 0, 'l', 0, 'a', 0, 's', 0, 'h', 0, ' ', 0, ' ', 0, /* 16 */
-
-    '/', 0, '0', 0, 'x', 0, '0', 0, '8', 0, '0', 0, '0', 0, '0', 0, '0', 0, '0', 0, '0', 0, /* 22 */
-
-    '/', 0, '1', 0, '2', 0, '*', 0, '0', 0, '0', 0, '1', 0, 'K', 0, 'a', 0, /* 18 */
-    ',', 0, '1', 0, '1', 0, '6', 0, '*', 0, '0', 0, '0', 0, '1', 0, 'K', 0, 'g', 0, /* 20 */
-};
-
+uint8_t DFU_StringSerial_Buffer[sizeof(struct usb_string_descriptor) + USBD_SERIALNUMBER_STRING_LENGTH*2];

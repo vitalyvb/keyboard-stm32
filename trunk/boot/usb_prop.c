@@ -113,12 +113,12 @@ USER_STANDARD_REQUESTS User_Standard_Requests =
 #define MK_SDESCRIPTOR(_p) { .Descriptor = (uint8_t*)(&_p), .Descriptor_Size = sizeof(_p) }
 
 ONE_DESCRIPTOR Device_Descriptor = MK_ADESCRIPTOR(DFU_DeviceDescriptor);
-ONE_DESCRIPTOR String_Descriptor[] = {
-    [DFU_ID_STRING_LANGID] = MK_ADESCRIPTOR(DFU_StringLangId),
-    [DFU_ID_STRING_VENDOR] = MK_ADESCRIPTOR(DFU_StringVendor),
-    [DFU_ID_STRING_PRODUCT] = MK_ADESCRIPTOR(DFU_StringProduct),
-    [DFU_ID_STRING_SERIAL] = MK_ADESCRIPTOR(DFU_StringSerial),
-    [DFU_ID_STRING_INTERFACE0] = MK_ADESCRIPTOR(DFU_StringInterface0),
+const struct usb_string_descriptor *String_Descriptor[] = {
+    [DFU_ID_STRING_LANGID] = &DFU_StringLangId,
+    [DFU_ID_STRING_VENDOR] = &DFU_StringVendor,
+    [DFU_ID_STRING_PRODUCT] = &DFU_StringProduct,
+    [DFU_ID_STRING_SERIAL] = (struct usb_string_descriptor*)&DFU_StringSerial_Buffer,
+    [DFU_ID_STRING_INTERFACE0] = &DFU_StringInterface0,
 };
 #define STRING_DESCRIPTOR_COUNT (sizeof(String_Descriptor)/sizeof(String_Descriptor[0]))
 
@@ -134,6 +134,22 @@ ONE_DESCRIPTOR Kbd_Hid_Descriptor = MK_SDESCRIPTOR(DFU_ConfigDescriptor.kbd_hid)
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
+void Setup_Serial_String_Descr()
+{
+    struct usb_string_descriptor *descr;
+
+    descr = (struct usb_string_descriptor *)DFU_StringSerial_Buffer;
+
+    descr->type = USB_STRING_DESCRIPTOR_TYPE;
+
+    /* Update the serial number string descriptor with the data from the unique ID*/
+    if (!Get_SerialNum((uint8_t*)descr->string)){
+	descr->size = sizeof(DFU_StringSerial_Buffer);
+    } else {
+	descr->size = sizeof(struct usb_string_descriptor);
+    }
+}
+
 /*******************************************************************************
 * Function Name  : DFU_init.
 * Description    : DFU init routine.
@@ -145,10 +161,10 @@ void DFU_init(void)
 {
   DEVICE_INFO *pInfo = &Device_Info;
 
-  /* Update the serial number string descriptor with the data from the unique ID*/
-  Get_SerialNum();
+  Setup_Serial_String_Descr();
 
   pInfo->Current_Configuration = 0;
+  pInfo->Current_Feature = DFU_ConfigDescriptor.config[7];
 
   /* Connect the device */
   PowerOn();
@@ -670,16 +686,23 @@ uint8_t *DFU_GetConfigDescriptor(uint16_t Length)
 *******************************************************************************/
 uint8_t *DFU_GetStringDescriptor(uint16_t Length)
 {
-  uint8_t wValue0 = pInformation->USBwValue0;
+    uint8_t wValue0 = pInformation->USBwValue0;
+    const struct usb_string_descriptor *descr;
+    uint32_t  wOffset;
 
-  if (wValue0 >= STRING_DESCRIPTOR_COUNT)
-  {
-    return NULL;
-  }
-  else
-  {
-    return Standard_GetDescriptorData(Length, &String_Descriptor[wValue0]);
-  }
+    if (wValue0 >= STRING_DESCRIPTOR_COUNT) {
+	return NULL;
+    }
+
+    descr = String_Descriptor[wValue0];
+    wOffset = pInformation->Ctrl_Info.Usb_wOffset;
+
+    if (Length == 0) {
+	pInformation->Ctrl_Info.Usb_wLength = descr->size - wOffset;
+	return 0;
+    }
+
+    return ((uint8_t*)descr) + wOffset;
 }
 
 /*******************************************************************************

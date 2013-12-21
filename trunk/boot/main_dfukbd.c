@@ -98,7 +98,10 @@ void kbd_suspend()
     }
 
     matrix_unselect_cols();
-    matrix_idle_wakeup_event_enter();
+
+    if (usb_remote_wakeup_enabled()) {
+	matrix_idle_wakeup_event_enter();
+    }
 }
 
 void kbd_resume()
@@ -221,17 +224,26 @@ void dfu_main(void)
     while (1){
 
 	if (unlikely(do_usb_resume)){
-	    do_usb_resume = 0;
 	    /* Check if the remote wakeup feature is enabled (it could be disabled
 	     * by the host through ClearFeature request)
 	     */
-	    if (pInformation->Current_Feature & 0x20) {
+	    if (bDeviceState != SUSPENDED) {
+		/* do nothing */
+		do_usb_resume = 0;
+	    } else
+	    if (usb_remote_wakeup_enabled()) {
 		Resume(RESUME_INTERNAL);
+		do_usb_resume = 0;
 	    } else {
-		/* resume disabled, revert to suspend state */
-		Suspend();
-		continue;
+		/* resume disabled, disable kbd-triggered wakeup and go to the suspend state */
+		matrix_idle_wakeup_event_leave();
+		/* clear flag before suspend
+		 * because the flag can be set again on resume
+		 */
+		do_usb_resume = 0; 
+		Suspend_Low();
 	    }
+	    continue;
 	}
 
 	if (bDeviceState != CONFIGURED){

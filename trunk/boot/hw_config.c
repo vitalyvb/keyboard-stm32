@@ -31,7 +31,6 @@
 #include "hw_config.h"
 #include "dfu_mal.h"
 #include "usb_lib.h"
-#include "usb_desc.h"
 #include "usb_pwr.h"
 
 
@@ -325,26 +324,28 @@ void Reset_Device(void)
 
 /*******************************************************************************
 * Function Name  : Get_SerialNum.
-* Description    : Create the serial number string descriptor.
+* Description    : Fill buffet with serial number.
 * Input          : None.
-* Output         : None.
-* Return         : None.
+* Output         : dest - string buffer for serial.
+* Return         : 0 if OK, <0 on error.
 *******************************************************************************/
-void Get_SerialNum(void)
+int Get_SerialNum(uint8_t *dest)
 {
   uint32_t Device_Serial0, Device_Serial1, Device_Serial2;
 
   Device_Serial0 = *(uint32_t*)ID1;
   Device_Serial1 = *(uint32_t*)ID2;
-  Device_Serial2 = *(uint32_t*)ID3;   
+  Device_Serial2 = *(uint32_t*)ID3;
 
   Device_Serial0 += Device_Serial2;
 
   if (Device_Serial0 != 0)
   {
-    IntToUnicode (Device_Serial0, &DFU_StringSerial[2] , 8);
-    IntToUnicode (Device_Serial1, &DFU_StringSerial[18], 4);
+    IntToUnicode (Device_Serial0, &dest[0], 8);
+    IntToUnicode (Device_Serial1, &dest[16], 4);
+    return 0;
   }
+  return -1;
 }
 
 /*******************************************************************************

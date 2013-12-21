@@ -31,8 +31,7 @@
 #define __USB_DESC_H
 #include "platform_config.h"
 #include "usb_defs.h"
-
-
+#include "hwusb_defs.h"
 
 
 #define DFU_ID_STRING_LANGID              0
@@ -42,21 +41,19 @@
 #define DFU_ID_STRING_INTERFACE0          4
 
 
-
+#define wTransferSize               0x0400   /* wTransferSize   = 1024 bytes */
 
 /* Includes ------------------------------------------------------------------*/
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 
-#define DFU_SIZ_STRING_LANGID           4
-#define DFU_SIZ_STRING_VENDOR           38
-#define DFU_SIZ_STRING_PRODUCT          20
-#define DFU_SIZ_STRING_SERIAL           26
-#define DFU_SIZ_STRING_INTERFACE0       98    /* Flash Bank 0 */
+struct usb_string_descriptor {
+    uint8_t size;
+    uint8_t type;
+    uint16_t string[];
+} __attribute__((packed));
 
-extern  uint8_t DFU_StringSerial     [DFU_SIZ_STRING_SERIAL];
-
-#define wTransferSize               0x0400   /* wTransferSize   = 1024 bytes */
+extern uint8_t DFU_StringSerial_Buffer[sizeof(struct usb_string_descriptor) + USBD_SERIALNUMBER_STRING_LENGTH*2];
 
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */

@@ -53,7 +53,7 @@ void SMI_FLASH_Init(void);
 void SMI_FLASH_SectorErase(uint32_t Address);
 void SMI_FLASH_WordWrite(uint32_t Address, uint32_t Data);
 void SMI_FLASH_PageWrite(uint32_t Address, uint32_t* wBuffer);
-void Get_SerialNum(void);
+int Get_SerialNum(uint8_t *dest);
 
 /* External variables --------------------------------------------------------*/
 
