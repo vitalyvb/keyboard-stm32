@@ -13,6 +13,7 @@ SIZE = $(TOOLS_PREFIX)size
 OBJDUMP = $(TOOLS_PREFIX)objdump
 OBJCOPY = $(TOOLS_PREFIX)objcopy
 STM32FLASH = stm32flash
+DFUUTIL = dfu-util
 
 -include $(TOPDIR)config-local.mk
 
