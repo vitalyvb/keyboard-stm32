@@ -34,7 +34,7 @@ CFLAGS+=-gdwarf-2 -g
 CFLAGS+=-ffunction-sections -fdata-sections
 
 CFLAGS+=-I$(TOPDIR)libs/cmsis -I$(TOPDIR)libs/stm32_lib -I$(TOPDIR)libs/stm32_usb-fs
-CFLAGS+=-I$(TOPDIR)libs/tinyprintf -I$(TOPDIR)libs/libc
+CFLAGS+=-I$(TOPDIR)libs/tinyprintf -I$(TOPDIR)libs/libc -I$(TOPDIR)libs/microrl
 CFLAGS+=-I$(TOPDIR)hardware/$(BOARD)
 CFLAGS+=-I$(TOPDIR)include
 CFLAGS+=-I.
@@ -44,7 +44,7 @@ LDFLAGS=-static -mcpu=cortex-m3 -mthumb -mthumb-interwork -Wl,-O2
 LDFLAGS+=-nostartfiles -nodefaultlibs -nostdlib
 
 LDLIBS_PATH=-L$(TOPDIR)libs/cmsis -L$(TOPDIR)libs/stm32_lib -L$(TOPDIR)libs/stm32_usb-fs
-LDLIBS_PATH+=-L$(TOPDIR)libs/tinyprintf -L$(TOPDIR)libs/libc
+LDLIBS_PATH+=-L$(TOPDIR)libs/tinyprintf -L$(TOPDIR)libs/libc -L$(TOPDIR)libs/microrl
 LDLIBS_PATH+=-L$(TOPDIR)hardware/$(BOARD)
 
 ######################################################################3

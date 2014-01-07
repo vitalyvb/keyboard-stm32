@@ -24,6 +24,8 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#ifdef BOOTLOADER
+
 #include "stm32conf.h"
 #include "kbd_keymap.h"
 
@@ -76,3 +78,5 @@ const uint8_t keymaps[][MATRIX_COLS][MATRIX_ROWS] = {
     LCTL, LGUI, LALT,             SPC,                RALT, RGUI, APP, RCTL,       LEFT, DOWN, RGHT,       P0,    PDOT       ),
 #endif
 };
+
+#endif /* BOOTLOADER */

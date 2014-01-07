@@ -1,0 +1,25 @@
+TOPDIR=../../
+include $(TOPDIR)config.mk
+
+BIN=core
+
+CFLAGS+=-c
+
+OBJS := usb_endp.o \
+	usb_istr.o \
+	usb_prop.o \
+	usb_pwr.o \
+	hal_usb.o
+
+LIB := libusb.a
+
+all: $(LIB)
+
+include $(TOPDIR)libs/stm32_usb-fs/Makefile.inc.mk
+
+$(LIB): $(OBJS)
+
+.PHONY: clean
+
+clean:
+	rm -f $(OBJS) $(LIB)

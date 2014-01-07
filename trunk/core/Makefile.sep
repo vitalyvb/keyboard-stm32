@@ -1,0 +1,41 @@
+TOPDIR=../
+include $(TOPDIR)config.mk
+
+BIN=core
+STARTUP=$(TOPDIR)device_support/gcc/startup_stm32f10x_md.s
+
+CFLAGS+=-c
+CFLAGS+=-DVECT_TAB_OFFSET=0x3000
+CFLAGS+=-DERASE_HEAP
+
+LDFLAGS+=-Wl,-Map,$(BIN).map
+LDFLAGS+=-Wl,-T,$(TOPDIR)device_support/gcc/stm32f103_64k_20k_dfu.ld
+LDFLAGS+=-Lusb_fs
+
+OBJS := startup.o \
+	hw_config.o \
+	util.o \
+	init.o \
+	main.o \
+	matrix.o \
+	stm32_it.o \
+	vt100.o \
+	shell.o \
+	console_usb.o
+
+all: $(BIN).elf $(BIN).lst $(BIN).hex $(BIN).bin
+	$(SIZE) -B $(BIN).elf
+
+startup.o: $(STARTUP)
+	$(AS) $(ASFLAGS) $(STARTUP) -o $@
+
+$(BIN).elf: $(OBJS)
+	$(CC) $(OBJS) $(LDFLAGS) $(LDLIBS_PATH) -lhw -lcmsis -lstm32_lib -lprintf -lmicrorl -lusb -llibc -o $@
+
+.PHONY: clean
+
+clean:
+	rm -f 	$(OBJS) \
+		$(BIN).map \
+		$(BIN).lst \
+		$(BIN).elf

@@ -30,9 +30,11 @@
 #ifdef __GNUC__
 # define likely(x)       __builtin_expect(!!(x), 1)
 # define unlikely(x)     __builtin_expect(!!(x), 0)
+# define _NOCLONE_NOINLINE_       __attribute__((__noclone__,__noinline__))
 #else
 # define likely(x)       (!!(x))
 # define unlikely(x)     (!!(x))
+# define _NOCLONE_NOINLINE_
 #endif
 
 typedef unsigned int size_t;
