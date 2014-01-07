@@ -24,35 +24,32 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef STRING_H
-#define STRING_H
+#ifndef USB_ENDP_H
+#define USB_ENDP_H
 
-#include <stddef.h>
-#include "defs.h"
+/*#define  EP1_IN_Callback   NOP_Process*/
+#define  EP2_IN_Callback   NOP_Process
+#define  EP3_IN_Callback   NOP_Process
+#define  EP4_IN_Callback   NOP_Process
+#define  EP5_IN_Callback   NOP_Process
+//#define  EP6_IN_Callback   NOP_Process
+#define  EP7_IN_Callback   NOP_Process
 
-int memcmp(const void *m1, const void *m2, size_t n);
-void *memmove(void *dst_void, const void *src_void, size_t length);
 
-/* arm-none-eabi-gcc-4.8.1 has some bug with cloning during -Os
- * optimization.
- *
- * Resulting object file fails to link with this error:
- *   whole_program.o: In function `terminal_move_cursor':
- *    libs/microrl/microrl.c:253: undefined reference to `memset'
- *
- * whole_program.o file has these symbols:
- *      U memset
- *      t memset.constprop.43
- *
- * Project compiles OK with a -O2.
- */
-void _NOCLONE_NOINLINE_ *memset(void *m, int c, size_t n);
+#define  EP1_OUT_Callback   NOP_Process
+#define  EP2_OUT_Callback   NOP_Process
+#define  EP3_OUT_Callback   NOP_Process
+#define  EP4_OUT_Callback   NOP_Process
+#define  EP5_OUT_Callback   NOP_Process
+//#define  EP6_OUT_Callback   NOP_Process
+#define  EP7_OUT_Callback   NOP_Process
 
-#define memcpy(a,b,c) memmove(a,b,c)
+void usb_ep_handlers_reset(void);
 
-char* strcat(char *s1, const char *s2);
-char* strcpy(char *dst0, const char *src0);
-size_t strlen(const char *str);
-int strcmp(const char *s1, const char *s2);
 
-#endif /* STRING_H */
+#define HID_EP_IDLE 0
+#define HID_EP_SENDING 1
+
+extern __IO uint8_t hid_ep_status[NUM_ENDPOINTS];
+
+#endif /* USB_ENDP_H */

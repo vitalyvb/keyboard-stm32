@@ -6,7 +6,13 @@ CFLAGS+=-c
 OBJS := memcmp.o \
 	memmove.o \
 	memset.o \
-	memcpy.o
+	ctype.o \
+	strcpy.o \
+	strcat.o \
+	strcmp.o \
+	strlen.o \
+	strtol.o \
+	strtoul.o
 
 LIB := liblibc.a
 

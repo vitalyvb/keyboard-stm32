@@ -1,6 +1,11 @@
 
 Most of STMicroelectronics libraries and code is under MCD-ST Liberty SW License Agreement V2.
 
+microrl library under GNU LGPLv3, (c) Eugene Samoylov aka Helius
+
+This product includes software developed by the University of
+California, Berkeley and its contributors.
+
 Other sources may have their own copyright, see corresponding directories and source files for
 more information.
 

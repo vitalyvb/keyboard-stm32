@@ -134,8 +134,15 @@ static char a2i(char ch, char **src, int base, unsigned int *nump)
 static void putchw(void *putp, putcf putf, struct param *p)
 {
     char ch;
-    int n = p->width;
+    int n = p->width, neg;
     char *bf = p->bf;
+
+    if (n < 0){
+	neg = 1;
+	n = -n;
+    } else {
+	neg = 0;
+    }
 
     /* Number of filling characters */
     while (*bf++ && n > 0)
@@ -148,7 +155,7 @@ static void putchw(void *putp, putcf putf, struct param *p)
         n--;
 
     /* Fill with space, before alternate or sign */
-    if (!p->lz) {
+    if (!neg && !p->lz) {
         while (n-- > 0)
             putf(putp, ' ');
     }
@@ -166,7 +173,7 @@ static void putchw(void *putp, putcf putf, struct param *p)
     }
 
     /* Fill with zeros, after alternate or sign */
-    if (p->lz) {
+    if (!neg && p->lz) {
         while (n-- > 0)
             putf(putp, '0');
     }
@@ -175,6 +182,12 @@ static void putchw(void *putp, putcf putf, struct param *p)
     bf = p->bf;
     while ((ch = *bf++))
         putf(putp, ch);
+
+    /* Fill with space if width is negative */
+    if (neg) {
+        while (n-- > 0)
+            putf(putp, ' ');
+    }
 }
 
 void tfp_format(void *putp, putcf putf, char *fmt, va_list va)
@@ -188,6 +201,7 @@ void tfp_format(void *putp, putcf putf, char *fmt, va_list va)
     p.bf = bf;
 
     char ch;
+    char negwidth;
 
     while ((ch = *(fmt++))) {
         if (ch != '%') {
@@ -198,6 +212,7 @@ void tfp_format(void *putp, putcf putf, char *fmt, va_list va)
             p.alt = 0;
             p.width = 0;
             p.sign = 0;
+            negwidth = 0;
 #ifdef PRINTF_LONG_SUPPORT
             char lng = 0;
 #endif
@@ -211,6 +226,9 @@ void tfp_format(void *putp, putcf putf, char *fmt, va_list va)
                 case '#':
                     p.alt = 1;
                     continue;
+                case '-':
+                    negwidth = 1;
+                    continue;
                 default:
                     break;
                 }
@@ -220,6 +238,8 @@ void tfp_format(void *putp, putcf putf, char *fmt, va_list va)
             /* Width */
             if (ch >= '0' && ch <= '9') {
                 ch = a2i(ch, &fmt, 10, &(p.width));
+                if (negwidth)
+                    p.width = -p.width;
             }
 #ifdef PRINTF_LONG_SUPPORT
             if (ch == 'l') {
@@ -284,7 +304,6 @@ void tfp_format(void *putp, putcf putf, char *fmt, va_list va)
         }
     }
  abort:;
-    usart_flush();
 }
 
 void init_printf(void *putp, void (*putf) (void *, char))
