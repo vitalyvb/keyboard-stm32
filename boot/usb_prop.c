@@ -261,7 +261,7 @@ void DFU_Status_In(void)
 {
   DEVICE_INFO *pInfo = &Device_Info; // XXX same as pInformation ?
 
-  if (pInfo->USBwIndex == KBD_INTERFACE){
+  if (pInfo->USBwIndex0 == KBD_INTERFACE){
     Kbd_Status_In();
     return;
   }
@@ -279,7 +279,7 @@ void DFU_Status_Out (void)
   DEVICE_INFO *pInfo = &Device_Info; // XXX same as pInformation ?
   uint32_t Addr;
 
-  if (pInfo->USBwIndex == KBD_INTERFACE){
+  if (pInfo->USBwIndex0 == KBD_INTERFACE){
     Kbd_Status_Out();
     return;
   }
@@ -512,7 +512,7 @@ RESULT DFU_Data_Setup(uint8_t RequestNo)
   uint8_t *(*CopyRoutine)(uint16_t);
   CopyRoutine = NULL;
 
-  if (pInformation->USBwIndex == KBD_INTERFACE){ // XXX USBwIndex0 ?
+  if (pInformation->USBwIndex0 == KBD_INTERFACE){
     return Kbd_Data_Setup(RequestNo);
   }
 
@@ -569,7 +569,7 @@ RESULT DFU_Data_Setup(uint8_t RequestNo)
 *******************************************************************************/
 RESULT DFU_NoData_Setup(uint8_t RequestNo)
 {
-  if (pInformation->USBwIndex == KBD_INTERFACE){ // XXX USBwIndex0 ?
+  if (pInformation->USBwIndex0 == KBD_INTERFACE){
     return Kbd_NoData_Setup(RequestNo);
   }
 
@@ -716,11 +716,11 @@ uint8_t *DFU_GetStringDescriptor(uint16_t Length)
 *******************************************************************************/
 RESULT DFU_Get_Interface_Setting(uint8_t Interface, uint8_t AlternateSetting)
 {
-  if (AlternateSetting > NUM_CONFIGURATIONS)
+  if (AlternateSetting >= NUM_CONFIGURATIONS)
   {
     return USB_UNSUPPORT;
   }
-  else if (Interface > NUM_INTERFACES)
+  else if (Interface >= NUM_INTERFACES)
   {
     return USB_UNSUPPORT;
   }
