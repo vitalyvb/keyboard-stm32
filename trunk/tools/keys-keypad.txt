@@ -1,0 +1,69 @@
+# ==============================================
+# Keypad
+# ==============================================
+
+53 NUM		NLCK
+54 Slash	PSLS
+55 Aster	PAST
+56 Minus	PMNS
+57 Plus		PPLS
+58 Enter	PENT
+59 1		P1
+5A 2		P2
+5B 3		P3
+5C 4		P4
+5D 5		P5
+5E 6		P6
+5F 7		P7
+60 8		P8
+61 9		P9
+62 0		P0
+63 Dot		PDOT
+67 Equal	PEQL
+85 Comma	PCMM
+B0 00
+B1 000
+B2 ThSep
+B3 DecSep
+B4 CurrUnit
+B5 CurrSub
+B6 LParen
+B7 RParen
+B8 LBrace
+B9 RBrace
+BA Tab
+BB Bspace
+BC A
+BD B
+BE C
+BF D
+C0 E
+C1 F
+C2 XOR
+C3 Hat
+C4 Perc
+C5 LT
+C6 GT
+C7 AND
+C8 ANDAND
+C9 OR
+CA OROR
+CB Colon
+CC Hash
+CD Space
+CE AT
+CF Excl
+D0 MemStor
+D1 MemRcl
+D2 MemClr
+D3 MemAdd
+D4 MemSub
+D5 MemMul
+D6 MemDiv
+D7 PlsMin
+D8 Clear
+D9 ClrEntry
+DA Bin
+DB Oct
+DC Dec
+DD Hex

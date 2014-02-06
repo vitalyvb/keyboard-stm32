@@ -1,0 +1,197 @@
+# ==============================================
+# Special
+# ==============================================
+
+#00 NA
+#01 ErrorRollOver
+#02 POSTFail
+#03 ErrorUndefined
+
+# ==============================================
+# Keyboard
+# ==============================================
+
+04 a
+05 b
+06 c
+07 d
+08 e
+09 f
+0A g
+0B h
+0C i
+0D j
+0E k
+0F l
+10 m
+11 n
+12 o
+13 p
+14 q
+15 r
+16 s
+17 t
+18 u
+19 v
+1A w
+1B x
+1C y
+1D z
+1E 1
+1F 2
+20 3
+21 4
+22 5
+23 6
+24 7
+25 8
+26 9
+27 0
+28 Enter	Ent
+29 Escape	Esc
+2A Bspace	BSpc
+2B Tab
+2C Space	Spc
+2D Minus	Mins
+2E Equal	Eql
+2F LBracket	LBrc
+30 RBracket	RBrc
+31 BSlash	BSls
+32 NU_Hash	NUHs
+33 SemiColon	SCln
+34 Quote	Quot
+35 Grave	Grv	ZKHK
+36 Comma	Comm
+37 Dot
+38 Slash	Slsh
+39 CapsLock	Caps	CLck
+3A F1
+3B F2
+3C F3
+3D F4
+3E F5
+3F F6
+40 F7
+41 F8
+42 F9
+43 F10
+44 F11
+45 F12
+46 PrintScr	PScr
+47 ScrollLock	SLck
+48 Pause	Paus	Brk
+49 Insert	Ins
+4A Home
+4B PageUp	PgUp
+4C Delete	Del
+4D End
+4E PageDown	PgDn
+4F Right	Rght
+50 Left
+51 Down
+52 Up
+64 NU_Bslash	NUBS
+65 App
+66 Power
+68 F13
+69 F14
+6A F15
+6B F16
+6C F17
+6D F18
+6E F19
+6F F20
+70 F21
+71 F22
+72 F23
+73 F24
+74 Exec
+75 Help
+76 Menu
+77 Select
+78 Stop
+79 Again
+7A Undo
+7B Cut
+7C Copy
+7D Paste
+7E Find
+7F Mute
+80 VolUp
+81 VolDn
+82 LCAPS	LCAP
+83 LNUM
+84 LSCROLL	LSCR
+87 Int1		RO
+88 Int2		KANA
+89 Int3		JYEN
+8A Int4		HENK
+8B Int5		MHEN
+8C Int6
+8D Int7
+8E Int8
+8F Int9
+90 LNG1
+91 LNG2
+92 LNG3
+93 LNG4
+94 LNG5
+95 LNG6
+96 LNG7
+97 LNG8
+98 LNG9
+99 Erase	Eras
+9A SysReq
+9B Cancel
+9C Clear	Clr
+9D Prior
+9E Return
+9F Sep
+A0 Out
+A1 Oper
+A2 ClrAgain
+A3 CrSel
+A4 ExSel
+
+C0 FN0
+C1 FN1
+C2 FN2
+C3 FN3
+C4 FN4
+C5 FN5
+C6 FN6
+C7 FN7
+C8 FN8
+C9 FN9
+CA FN10
+CB FN11
+CC FN12
+CD FN13
+CE FN14
+CF FN15
+
+D0 FN16
+D1 FN17
+D2 FN18
+D3 FN19
+D4 FN20
+D5 FN21
+D6 FN22
+D7 FN23
+D8 FN24
+D9 FN25
+DA FN26
+DB FN27
+DC FN28
+DD FN29
+DE FN30
+DF FN31
+
+E0 LCtrl	LCtl
+E1 LShift	LSft
+E2 LAlt
+E3 LGUI
+E4 RCtrl	RCtl
+E5 RShift	RSft
+E6 RAlt
+E7 RGUI

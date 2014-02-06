@@ -1,0 +1,69 @@
+# ==============================================
+# Keypad
+# ==============================================
+
+53 KP_NUM		NLCK
+54 KP_Slash	PSLS
+55 KP_Aster	PAST
+56 KP_Minus	PMNS
+57 KP_Plus		PPLS
+58 KP_Enter	PENT
+59 KP_1		P1
+5A KP_2		P2
+5B KP_3		P3
+5C KP_4		P4
+5D KP_5		P5
+5E KP_6		P6
+5F KP_7		P7
+60 KP_8		P8
+61 KP_9		P9
+62 KP_0		P0
+63 KP_Dot		PDOT
+67 KP_Equal	PEQL
+85 KP_Comma	PCMM
+B0 KP_00
+B1 KP_000
+B2 KP_ThSep
+B3 KP_DecSep
+B4 KP_CurrUnit
+B5 KP_CurrSub
+B6 KP_LParen
+B7 KP_RParen
+B8 KP_LBrace
+B9 KP_RBrace
+BA KP_Tab
+BB KP_Bspace
+BC KP_A
+BD KP_B
+BE KP_C
+BF KP_D
+C0 KP_E
+C1 KP_F
+C2 KP_XOR
+C3 KP_Hat
+C4 KP_Perc
+C5 KP_LT
+C6 KP_GT
+C7 KP_AND
+C8 KP_ANDAND
+C9 KP_OR
+CA KP_OROR
+CB KP_Colon
+CC KP_Hash
+CD KP_Space
+CE KP_AT
+CF KP_Excl
+D0 KP_MemStor
+D1 KP_MemRcl
+D2 KP_MemClr
+D3 KP_MemAdd
+D4 KP_MemSub
+D5 KP_MemMul
+D6 KP_MemDiv
+D7 KP_PlsMin
+D8 KP_Clear
+D9 KP_ClrEntry
+DA KP_Bin
+DB KP_Oct
+DC KP_Dec
+DD KP_Hex
