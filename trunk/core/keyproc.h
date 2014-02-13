@@ -24,9 +24,19 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef APP_MAIN_H
-#define APP_MAIN_H
+#ifndef APP_KEYPROC_H
+#define APP_KEYPROC_H
 
-void kbd_handle_exti_interrupt();
+#include "usb_conf.h"
 
-#endif /* APP_MAIN_H */
+void kbd_process_reset(void);
+void kbd_process_leds(void);
+void kbd_process_send_events(void);
+void kbd_process_suspend(void);
+void kbd_process_resume(void);
+
+void event_keyup(int col, int row);
+void event_keydown(int col, int row);
+void event_tick();
+
+#endif /* APP_KEYPROC_H */

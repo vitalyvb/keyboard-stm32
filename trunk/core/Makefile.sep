@@ -21,7 +21,8 @@ OBJS := startup.o \
 	stm32_it.o \
 	vt100.o \
 	shell.o \
-	console_usb.o
+	console_usb.o \
+	keyproc.o
 
 all: $(BIN).elf $(BIN).lst $(BIN).hex $(BIN).bin
 	$(SIZE) -B $(BIN).elf
