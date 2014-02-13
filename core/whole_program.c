@@ -14,6 +14,7 @@
 #include "init.c"
 #include "util.c"
 #include "main.c"
+#include "keyproc.c"
 #include "stm32_it.c"
 #include "system_stm32f10x.c"
 #include "microrl.c"

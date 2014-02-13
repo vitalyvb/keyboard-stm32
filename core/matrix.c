@@ -30,6 +30,7 @@
 #include "matrix.h"
 #include "main.h"
 #include "defs.h"
+#include "keyproc.h"
 
 /*******************************************************************/
 #define DEBOUNCE_TIMER_PRESS (2)
