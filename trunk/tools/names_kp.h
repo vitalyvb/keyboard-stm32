@@ -1,6 +1,6 @@
 /* DO NOT EDIT. THIS FILE IS GENERATED. */
-#ifndef GEN_NAMES_H_9828_28430
-#define GEN_NAMES_H_9828_28430
+#ifndef GEN_NAMES_H_22379_22089
+#define GEN_NAMES_H_22379_22089
 
 #define KC_KP_000	(0xB1)
 #define KC_KP_00	(0xB0)
@@ -67,24 +67,5 @@
 #define KC_KP_TAB	(0xBA)
 #define KC_KP_THSEP	(0xB2)
 #define KC_KP_XOR	(0xC2)
-#define KC_NLCK	(0x53)
-#define KC_P0	(0x62)
-#define KC_P1	(0x59)
-#define KC_P2	(0x5A)
-#define KC_P3	(0x5B)
-#define KC_P4	(0x5C)
-#define KC_P5	(0x5D)
-#define KC_P6	(0x5E)
-#define KC_P7	(0x5F)
-#define KC_P8	(0x60)
-#define KC_P9	(0x61)
-#define KC_PAST	(0x55)
-#define KC_PCMM	(0x85)
-#define KC_PDOT	(0x63)
-#define KC_PENT	(0x58)
-#define KC_PEQL	(0x67)
-#define KC_PMNS	(0x56)
-#define KC_PPLS	(0x57)
-#define KC_PSLS	(0x54)
 
-#endif /* GEN_NAMES_H_9828_28430 */
+#endif /* GEN_NAMES_H_22379_22089 */

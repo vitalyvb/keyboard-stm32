@@ -1,8 +1,6 @@
 /* DO NOT EDIT. THIS FILE IS GENERATED. */
-#ifndef GEN_NAMES_H_9196_32671
-#define GEN_NAMES_H_9196_32671
 
-const unsigned char *constkeynames_kp = 
+const unsigned char *constkeynames_kp = (unsigned char*)
 	"\xB1"	"\x03"	"000"
 	"\xB0"	"\x02"	"00"
 	"\x62"	"\x01"	"0"
@@ -54,32 +52,13 @@ const unsigned char *constkeynames_kp =
 	"\xD0"	"\x07"	"MEMSTOR"
 	"\xD4"	"\x06"	"MEMSUB"
 	"\x56"	"\x05"	"MINUS"
-	"\x53"	"\x04"	"NLCK"
 	"\x53"	"\x03"	"NUM"
 	"\xDB"	"\x03"	"OCT"
 	"\xC9"	"\x02"	"OR"
 	"\xCA"	"\x04"	"OROR"
-	"\x62"	"\x02"	"P0"
-	"\x59"	"\x02"	"P1"
-	"\x5A"	"\x02"	"P2"
-	"\x5B"	"\x02"	"P3"
-	"\x5C"	"\x02"	"P4"
-	"\x5D"	"\x02"	"P5"
-	"\x5E"	"\x02"	"P6"
-	"\x5F"	"\x02"	"P7"
-	"\x60"	"\x02"	"P8"
-	"\x61"	"\x02"	"P9"
-	"\x55"	"\x04"	"PAST"
-	"\x85"	"\x04"	"PCMM"
-	"\x63"	"\x04"	"PDOT"
-	"\x58"	"\x04"	"PENT"
-	"\x67"	"\x04"	"PEQL"
 	"\xC4"	"\x04"	"PERC"
 	"\xD7"	"\x06"	"PLSMIN"
 	"\x57"	"\x04"	"PLUS"
-	"\x56"	"\x04"	"PMNS"
-	"\x57"	"\x04"	"PPLS"
-	"\x54"	"\x04"	"PSLS"
 	"\xB9"	"\x06"	"RBRACE"
 	"\xB7"	"\x06"	"RPAREN"
 	"\x54"	"\x05"	"SLASH"
@@ -88,4 +67,3 @@ const unsigned char *constkeynames_kp =
 	"\xB2"	"\x05"	"THSEP"
 	"\xC2"	"\x03"	"XOR"
 	"\x00";
-#endif /* GEN_NAMES_H_9196_32671 */
