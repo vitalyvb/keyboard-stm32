@@ -5,22 +5,27 @@ _gen_id="_$$_$RANDOM"
 infile="$1"
 hfile="$2"
 varsuffix="$3"
+prefix="$4"
 
 cat > "$hfile" <<EOF1
 /* DO NOT EDIT. THIS FILE IS GENERATED. */
-#ifndef GEN_NAMES_H${_gen_id}
-#define GEN_NAMES_H${_gen_id}
 
-const unsigned char *const${varsuffix} = 
+const unsigned char *const${varsuffix} = (unsigned char*)
 EOF1
 
 cat "$infile" | grep -v '^#' | grep -v '^$' | sed -e "s/#.*$//" |
-awk '
+awk -v prefix="$prefix" '
 {
     c=$1;
     i=2;
     while ($i != ""){
-	printf("%s %s %02x\n", toupper($i), c, length($i));
+	p=$i;
+	if (prefix){
+		sub(prefix, "", p);
+	} else {
+		sub(/^[0-9]/, "_&", p);
+	}
+	printf("%s %s %02x\n", toupper(p), c, length(p));
 	i++;
     }
 }
@@ -45,6 +50,5 @@ done >> "$hfile"
 
 cat >> "$hfile" <<EOF2
 	"\x00";
-#endif /* GEN_NAMES_H${_gen_id} */
 EOF2
 

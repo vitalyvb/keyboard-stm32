@@ -195,3 +195,27 @@ E4 RCtrl	RCtl
 E5 RShift	RSft
 E6 RAlt
 E7 RGUI
+
+# ==============================================
+# Keypad short names
+# ==============================================
+
+53 NLCK
+54 PSLS
+55 PAST
+56 PMNS
+57 PPLS
+58 PENT
+59 P1
+5A P2
+5B P3
+5C P4
+5D P5
+5E P6
+5F P7
+60 P8
+61 P9
+62 P0
+63 PDOT
+67 PEQL
+85 PCMM

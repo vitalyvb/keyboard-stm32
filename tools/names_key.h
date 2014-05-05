@@ -1,6 +1,6 @@
 /* DO NOT EDIT. THIS FILE IS GENERATED. */
-#ifndef GEN_NAMES_H_9374_10099
-#define GEN_NAMES_H_9374_10099
+#ifndef GEN_NAMES_H_21882_423
+#define GEN_NAMES_H_21882_423
 
 #define KC_0	(0x27)
 #define KC_1	(0x1E)
@@ -163,6 +163,7 @@
 #define KC_MINUS	(0x2D)
 #define KC_MUTE	(0x7F)
 #define KC_N	(0x11)
+#define KC_NLCK	(0x53)
 #define KC_NUBS	(0x64)
 #define KC_NU_BSLASH	(0x64)
 #define KC_NU_HASH	(0x32)
@@ -170,18 +171,36 @@
 #define KC_O	(0x12)
 #define KC_OPER	(0xA1)
 #define KC_OUT	(0xA0)
+#define KC_P0	(0x62)
 #define KC_P	(0x13)
+#define KC_P1	(0x59)
+#define KC_P2	(0x5A)
+#define KC_P3	(0x5B)
+#define KC_P4	(0x5C)
+#define KC_P5	(0x5D)
+#define KC_P6	(0x5E)
+#define KC_P7	(0x5F)
+#define KC_P8	(0x60)
+#define KC_P9	(0x61)
 #define KC_PAGEDOWN	(0x4E)
 #define KC_PAGEUP	(0x4B)
+#define KC_PAST	(0x55)
 #define KC_PASTE	(0x7D)
 #define KC_PAUS	(0x48)
 #define KC_PAUSE	(0x48)
+#define KC_PCMM	(0x85)
+#define KC_PDOT	(0x63)
+#define KC_PENT	(0x58)
+#define KC_PEQL	(0x67)
 #define KC_PGDN	(0x4E)
 #define KC_PGUP	(0x4B)
+#define KC_PMNS	(0x56)
 #define KC_POWER	(0x66)
+#define KC_PPLS	(0x57)
 #define KC_PRINTSCR	(0x46)
 #define KC_PRIOR	(0x9D)
 #define KC_PSCR	(0x46)
+#define KC_PSLS	(0x54)
 #define KC_Q	(0x14)
 #define KC_QUOT	(0x34)
 #define KC_QUOTE	(0x34)
@@ -225,4 +244,4 @@
 #define KC_Z	(0x1D)
 #define KC_ZKHK	(0x35)
 
-#endif /* GEN_NAMES_H_9374_10099 */
+#endif /* GEN_NAMES_H_21882_423 */
