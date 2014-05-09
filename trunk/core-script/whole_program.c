@@ -1,4 +1,5 @@
 #include "stm32conf.h"
+#include "defs.h"
 #include "core_cm3.c"
 
 #include "libc.c"
@@ -10,30 +11,50 @@
 
 #include "misc.c"
 
-#include "usb_int.c"
-#include "usb_init.c"
-#include "usb_core.c"
-#include "usb_mem.c"
-#include "usb_regs.c"
-#include "usb_sil.c"
-
-
 #include "hw_config.c"
+#include "init.c"
+#include "util.c"
 #include "main.c"
+#include "keyproc.c"
 #include "stm32_it.c"
 #include "system_stm32f10x.c"
-#include "usb_istr.c"
-#include "usb_prop.c"
-#include "usb_pwr.c"
-#include "usb_endp.c"
+#include "microrl.c"
+#include "printf.c"
 
 #include "keymap.c"
 #include "kbd_matrix.c"
 #include "kbd_led.c"
 #include "hwboard.c"
-
-#include "main_dfukbd.c"
+#include "vt100.c"
+#include "shell.c"
+#include "console_usb.c"
 #include "matrix.c"
+#include "script.c"
+
+#include "csp_api.c"
+#include "gen.c"
+#include "lexer.tab.c"
+#include "parser.tab.c"
+#include "vm.c"
+#include "arrays.c"
+
+#include "../tools/names_key.c"
+#include "../tools/names_kp.c"
+
+#include "hal_usb.h"
+#if (USB_MODEL == USB_FS)
+# include "usb_fs/hal_usb.c"
+# include "usb_fs/usb_istr.c"
+# include "usb_fs/usb_prop.c"
+# include "usb_fs/usb_pwr.c"
+# include "usb_fs/usb_endp.c"
+# include "usb_int.c"
+# include "usb_init.c"
+# include "usb_core.c"
+# include "usb_mem.c"
+# include "usb_regs.c"
+# include "usb_sil.c"
+#endif
 
 void EXTERNAL SystemInit (void);
 void EXTERNAL NMI_Handler(void);

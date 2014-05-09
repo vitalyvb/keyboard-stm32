@@ -35,6 +35,7 @@ CFLAGS+=-ffunction-sections -fdata-sections
 
 CFLAGS+=-I$(TOPDIR)libs/cmsis -I$(TOPDIR)libs/stm32_lib -I$(TOPDIR)libs/stm32_usb-fs
 CFLAGS+=-I$(TOPDIR)libs/tinyprintf -I$(TOPDIR)libs/libc -I$(TOPDIR)libs/microrl
+CFLAGS+=-I$(TOPDIR)libs/csp-script/include
 CFLAGS+=-I$(TOPDIR)hardware/$(BOARD)
 CFLAGS+=-I$(TOPDIR)include
 CFLAGS+=-I.

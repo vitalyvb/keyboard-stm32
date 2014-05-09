@@ -8,8 +8,10 @@ OBJS := memcmp.o \
 	memset.o \
 	ctype.o \
 	strcpy.o \
+	strncpy.o \
 	strcat.o \
 	strcmp.o \
+	strncmp.o \
 	strlen.o \
 	strtol.o \
 	strtoul.o

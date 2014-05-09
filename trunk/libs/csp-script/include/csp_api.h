@@ -1,4 +1,4 @@
-/* Copyright (c) 2013, Vitaly Bursov <vitaly<AT>bursov.com>
+/* Copyright (c) 2014, Vitaly Bursov <vitaly<AT>bursov.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -24,37 +24,44 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef STRING_H
-#define STRING_H
+#ifndef CSP_PARSER_API_H
+#define CSP_PARSER_API_H
 
 #include <stddef.h>
-#include "defs.h"
+#include <stdint.h>
+#include "csp_defs.h"
 
-int memcmp(const void *m1, const void *m2, size_t n);
-void *memmove(void *dst_void, const void *src_void, size_t length);
-
-/* arm-none-eabi-gcc-4.8.1 has some bug with cloning during -Os
- * optimization.
- *
- * Resulting object file fails to link with this error:
- *   whole_program.o: In function `terminal_move_cursor':
- *    libs/microrl/microrl.c:253: undefined reference to `memset'
- *
- * whole_program.o file has these symbols:
- *      U memset
- *      t memset.constprop.43
- *
- * Project compiles OK with a -O2.
+/* names are stored in the following format:
+ *   byte 1 = var name len (N)
+ *   bytes 2..(N+1) variable name without null-terminating char
+ *   byte (N+2) = another variable len
+ *   ...
+ *   buffer ends or null char
  */
-void _NOCLONE_NOINLINE_ *memset(void *m, int c, size_t n);
+struct csp_names {
+    uint8_t *buf;
+    uint16_t tail;
+    uint16_t size;
+    uint8_t idx;
+};
 
-#define memcpy(a,b,c) memmove(a,b,c)
+extern CSP_EXTERNAL int csp_errno;
+extern CSP_EXTERNAL int csp_errline;
+#if CSP_STRING_ERRORS
+extern CSP_EXTERNAL char csp_errstr[CSP_ERRSTR_SIZE];
+#else
+#define csp_errstr ""
+#endif
 
-char* strcat(char *s1, const char *s2);
-char* strcpy(char *dst0, const char *src0);
-char* strncpy(char *dst0, const char *src0, size_t count);
-size_t strlen(const char *str);
-int strcmp(const char *s1, const char *s2);
-int strncmp(const char *s1, const char *s2, size_t n);
+void CSP_EXTERNAL csp_init(void);
+void CSP_EXTERNAL csp_free(void);
+void CSP_EXTERNAL csp_set_environ(const struct csp_names *functions);
+int CSP_EXTERNAL csp_parse(uint8_t *prog_buffer, int size);
+int CSP_EXTERNAL csp_get_program_size(uint8_t *prog_buffer, int size);
 
-#endif /* STRING_H */
+/* callbacks that application should define */
+int csp_text_input_callback (char *buf, int max_size);
+int csp_get_const_value(const char *name, int len, int *value);
+
+#endif /* CSP_PARSER_API_H */
+

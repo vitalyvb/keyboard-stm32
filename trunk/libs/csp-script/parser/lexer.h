@@ -1,4 +1,4 @@
-/* Copyright (c) 2013, Vitaly Bursov <vitaly<AT>bursov.com>
+/* Copyright (c) 2014, Vitaly Bursov <vitaly<AT>bursov.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -24,37 +24,43 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef STRING_H
-#define STRING_H
+#ifndef LEXER_H
+#define LEXER_H
 
-#include <stddef.h>
-#include "defs.h"
+#include "csp_defs.h"
 
-int memcmp(const void *m1, const void *m2, size_t n);
-void *memmove(void *dst_void, const void *src_void, size_t length);
+struct ragel_lexer_t {
 
-/* arm-none-eabi-gcc-4.8.1 has some bug with cloning during -Os
- * optimization.
- *
- * Resulting object file fails to link with this error:
- *   whole_program.o: In function `terminal_move_cursor':
- *    libs/microrl/microrl.c:253: undefined reference to `memset'
- *
- * whole_program.o file has these symbols:
- *      U memset
- *      t memset.constprop.43
- *
- * Project compiles OK with a -O2.
- */
-void _NOCLONE_NOINLINE_ *memset(void *m, int c, size_t n);
+    char *te;		/* ragel */
+    char *ts;		/* ragel */
+    int cs;		/* ragel */
+    int act;		/* ragel */
 
-#define memcpy(a,b,c) memmove(a,b,c)
+    char *buffer;
+    uint16_t bufsize;
 
-char* strcat(char *s1, const char *s2);
-char* strcpy(char *dst0, const char *src0);
-char* strncpy(char *dst0, const char *src0, size_t count);
-size_t strlen(const char *str);
-int strcmp(const char *s1, const char *s2);
-int strncmp(const char *s1, const char *s2, size_t n);
+    /* state offsets */
+    uint16_t p_offs;	/* ragel, offset from the buffer start */
+    uint16_t pe_offs;	/* ragel, offset from the buffer start */
 
-#endif /* STRING_H */
+    /* other data */
+    uint16_t lineno;
+    uint8_t status;
+
+    /* token information for a parser */
+    char *token;
+    uint16_t token_len;
+};
+
+#define LEX_STATUS_WIP		0
+#define LEX_STATUS_EOF		1
+
+#define LEX_STATUS_ERR		2 /* error states must be >= LEX_STATUS_ERR */
+#define LEX_STATUS_OVERFLOW	3
+#define LEX_STATUS_BAD_TOKEN	4
+
+int scanner_init(struct ragel_lexer_t *YY, char *buffer, uint16_t size);
+
+int yylex(void *yylval, void *lex_state);
+
+#endif /* LEXER_H */

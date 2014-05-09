@@ -1,4 +1,4 @@
-/* Copyright (c) 2013, Vitaly Bursov <vitaly<AT>bursov.com>
+/* Copyright (c) 2014, Vitaly Bursov <vitaly<AT>bursov.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -24,37 +24,42 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef STRING_H
-#define STRING_H
+#ifndef CSP_INTERNAL_H
+#define CSP_INTERNAL_H
 
 #include <stddef.h>
-#include "defs.h"
+#include <stdint.h>
+#include "csp_defs.h"
 
-int memcmp(const void *m1, const void *m2, size_t n);
-void *memmove(void *dst_void, const void *src_void, size_t length);
+#define MAPPING_SIZE (256)
+struct csp_mapping {
+    uint8_t data[MAPPING_SIZE]; /* MUST be first */
+    uint16_t count;
+    uint8_t min;
+    uint8_t max;
+};
 
-/* arm-none-eabi-gcc-4.8.1 has some bug with cloning during -Os
- * optimization.
- *
- * Resulting object file fails to link with this error:
- *   whole_program.o: In function `terminal_move_cursor':
- *    libs/microrl/microrl.c:253: undefined reference to `memset'
- *
- * whole_program.o file has these symbols:
- *      U memset
- *      t memset.constprop.43
- *
- * Project compiles OK with a -O2.
- */
-void _NOCLONE_NOINLINE_ *memset(void *m, int c, size_t n);
 
-#define memcpy(a,b,c) memmove(a,b,c)
+void _csp_set_error(int err, int line, const char *msg, ...);
 
-char* strcat(char *s1, const char *s2);
-char* strcpy(char *dst0, const char *src0);
-char* strncpy(char *dst0, const char *src0, size_t count);
-size_t strlen(const char *str);
-int strcmp(const char *s1, const char *s2);
-int strncmp(const char *s1, const char *s2, size_t n);
+#if CSP_STRING_ERRORS
+#define csp_set_error _csp_set_error
+#else
+#define csp_set_error(e,l,x...) _csp_set_error((e),(l),NULL)
+#endif
 
-#endif /* STRING_H */
+/* internal aliases */
+#ifndef CSP_TEXT_INPUT_CALLBACK
+#define CSP_TEXT_INPUT_CALLBACK csp_text_input_callback
+#endif
+
+#ifndef CSP_GET_CONST_VALUE
+#define CSP_GET_CONST_VALUE csp_get_const_value
+#endif
+
+#ifndef CSP_VM_API_CALL_CALLBACK
+#define CSP_VM_API_CALL_CALLBACK csp_vm_api_call_callback
+#endif
+
+#endif /* CSP_INTERNAL_H */
+

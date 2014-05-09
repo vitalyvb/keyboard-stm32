@@ -1,4 +1,4 @@
-/* Copyright (c) 2013, Vitaly Bursov <vitaly<AT>bursov.com>
+/* Copyright (c) 2014, Vitaly Bursov <vitaly<AT>bursov.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -24,37 +24,23 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef STRING_H
-#define STRING_H
+#ifndef CSP_VM_H
+#define CSP_VM_H
 
 #include <stddef.h>
-#include "defs.h"
+#include <stdint.h>
+#include "csp_defs.h"
 
-int memcmp(const void *m1, const void *m2, size_t n);
-void *memmove(void *dst_void, const void *src_void, size_t length);
+int CSP_EXTERNAL csp_vm_init(uint8_t *vmbuf, int size);
 
-/* arm-none-eabi-gcc-4.8.1 has some bug with cloning during -Os
- * optimization.
- *
- * Resulting object file fails to link with this error:
- *   whole_program.o: In function `terminal_move_cursor':
- *    libs/microrl/microrl.c:253: undefined reference to `memset'
- *
- * whole_program.o file has these symbols:
- *      U memset
- *      t memset.constprop.43
- *
- * Project compiles OK with a -O2.
- */
-void _NOCLONE_NOINLINE_ *memset(void *m, int c, size_t n);
+int CSP_EXTERNAL csp_vm_load_program(uint8_t *code_start, int progsize, int api_fncnt);
+int CSP_EXTERNAL csp_vm_find_func(const char *name);
 
-#define memcpy(a,b,c) memmove(a,b,c)
+int CSP_EXTERNAL csp_vm_run_function(int stack_size, int fn, int argc, int *argv);
+int CSP_EXTERNAL csp_vm_get_call_result(void);
 
-char* strcat(char *s1, const char *s2);
-char* strcpy(char *dst0, const char *src0);
-char* strncpy(char *dst0, const char *src0, size_t count);
-size_t strlen(const char *str);
-int strcmp(const char *s1, const char *s2);
-int strncmp(const char *s1, const char *s2, size_t n);
+/* callbacks that application should define */
+int csp_vm_api_call_callback(int num, int argc, int *argv, int *res);
+int CSP_EXTERNAL csp_vm_api_new_array(int num, int argc, int *argv, int *res);
 
-#endif /* STRING_H */
+#endif /* CSP_VM_H */

@@ -28,6 +28,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
 
+#include <stddef.h>
 #include "printf.h"
 
 typedef void (*putcf) (void *, char);
@@ -115,9 +116,9 @@ static int a2d(char ch)
         return -1;
 }
 
-static char a2i(char ch, char **src, int base, unsigned int *nump)
+static char a2i(char ch, const char **src, int base, unsigned int *nump)
 {
-    char *p = *src;
+    const char *p = *src;
     int num = 0;
     int digit;
     while ((digit = a2d(ch)) >= 0) {
@@ -190,7 +191,7 @@ static void putchw(void *putp, putcf putf, struct param *p)
     }
 }
 
-void tfp_format(void *putp, putcf putf, char *fmt, va_list va)
+void tfp_format(void *putp, putcf putf, const char *fmt, va_list va)
 {
     struct param p;
 #ifdef PRINTF_LONG_SUPPORT
@@ -320,7 +321,7 @@ void tfp_printf(char *fmt, ...)
     va_end(va);
 }
 
-static void putcp(void *p, char c)
+/*static void putcp(void *p, char c)
 {
     *(*((char **)p))++ = c;
 }
@@ -332,4 +333,45 @@ void tfp_sprintf(char *s, char *fmt, ...)
     tfp_format(&s, putcp, fmt, va);
     putcp(&s, 0);
     va_end(va);
+}*/
+
+struct tfp_sizecnt {
+    char *ptr;
+    size_t size;
+};
+
+static void putcp_size(void *p, char c)
+{
+    struct tfp_sizecnt *state = (struct tfp_sizecnt*)p;
+    size_t size = state->size;
+
+    if (size) {
+	*(state->ptr++) = c;
+	state->size = size - 1;
+    }
 }
+
+int tfp_vsnprintf(char *str, size_t size, const char *fmt, va_list va)
+{
+    struct tfp_sizecnt state;
+
+    state.ptr = str;
+    state.size = size;
+
+    tfp_format(&state, putcp_size, fmt, va);
+    putcp_size(&state, 0);
+
+    return size - state.size;
+}
+
+int tfp_snprintf(char *s, size_t size, char *fmt, ...)
+{
+    int res;
+    va_list va;
+
+    va_start(va, fmt);
+    res = tfp_vsnprintf(s, size, fmt, va);
+    va_end(va);
+    return res;
+}
+
