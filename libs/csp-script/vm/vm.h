@@ -1,4 +1,4 @@
-/* Copyright (c) 2013, Vitaly Bursov <vitaly<AT>bursov.com>
+/* Copyright (c) 2014, Vitaly Bursov <vitaly<AT>bursov.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -24,37 +24,50 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef STRING_H
-#define STRING_H
+#ifndef VM_H
+#define VM_H
 
-#include <stddef.h>
-#include "defs.h"
+#include "csp_incl.h"
+#include "csp_defs.h"
+#include "csp_vm.h"
+#include "csp_internal.h"
 
-int memcmp(const void *m1, const void *m2, size_t n);
-void *memmove(void *dst_void, const void *src_void, size_t length);
+struct cache_item {
+    uint16_t offset;
+    uint8_t idx;
+    uint8_t _pad;
+};
 
-/* arm-none-eabi-gcc-4.8.1 has some bug with cloning during -Os
- * optimization.
- *
- * Resulting object file fails to link with this error:
- *   whole_program.o: In function `terminal_move_cursor':
- *    libs/microrl/microrl.c:253: undefined reference to `memset'
- *
- * whole_program.o file has these symbols:
- *      U memset
- *      t memset.constprop.43
- *
- * Project compiles OK with a -O2.
- */
-void _NOCLONE_NOINLINE_ *memset(void *m, int c, size_t n);
+struct vm {
+    int globals_cnt;
+    int maps_cnt;
+    int funcs_cnt;
 
-#define memcpy(a,b,c) memmove(a,b,c)
+    int api_func_cnt;
 
-char* strcat(char *s1, const char *s2);
-char* strcpy(char *dst0, const char *src0);
-char* strncpy(char *dst0, const char *src0, size_t count);
-size_t strlen(const char *str);
-int strcmp(const char *s1, const char *s2);
-int strncmp(const char *s1, const char *s2, size_t n);
+    uint8_t *vm_buffer;	/* stack and call data for running functions */
+    uint8_t *vm_buffer_end;
 
-#endif /* STRING_H */
+    struct cache_item *cache_maps;	/* points to structure tail */
+    struct cache_item *cache_funcs;	/* points to structure tail */
+
+#if CSP_ARRAYS_ENABLE && !CSP_ARRAYS_USE_MALLOC
+    uint8_t *arrays_ptr;		/* points to structure tail */
+    uint8_t *tail_ptr;			/* points to structure tail */
+#endif
+
+    int vm_bufsize;
+
+    uint8_t *func_names;
+    int func_names_len;
+    int func_call_result;
+
+    int global_vars[0];		/* buffer for global variables */
+/*    struct cache_item cache_maps[0];  */
+/*    struct cache_item cache_funcs[0]; */
+/*    uint8_t arrays[0]; */	/* buffer for arrays */
+};
+
+extern struct vm *vm;
+
+#endif /* VM_H */

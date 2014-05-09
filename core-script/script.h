@@ -24,37 +24,10 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef STRING_H
-#define STRING_H
+#ifndef APP_SCRIPT_H
+#define APP_SCRIPT_H
 
-#include <stddef.h>
-#include "defs.h"
+void script_init(uint8_t *vmbuf, int vm_size);
+void load_script_from_console();
 
-int memcmp(const void *m1, const void *m2, size_t n);
-void *memmove(void *dst_void, const void *src_void, size_t length);
-
-/* arm-none-eabi-gcc-4.8.1 has some bug with cloning during -Os
- * optimization.
- *
- * Resulting object file fails to link with this error:
- *   whole_program.o: In function `terminal_move_cursor':
- *    libs/microrl/microrl.c:253: undefined reference to `memset'
- *
- * whole_program.o file has these symbols:
- *      U memset
- *      t memset.constprop.43
- *
- * Project compiles OK with a -O2.
- */
-void _NOCLONE_NOINLINE_ *memset(void *m, int c, size_t n);
-
-#define memcpy(a,b,c) memmove(a,b,c)
-
-char* strcat(char *s1, const char *s2);
-char* strcpy(char *dst0, const char *src0);
-char* strncpy(char *dst0, const char *src0, size_t count);
-size_t strlen(const char *str);
-int strcmp(const char *s1, const char *s2);
-int strncmp(const char *s1, const char *s2, size_t n);
-
-#endif /* STRING_H */
+#endif /* APP_SCRIPT_H */

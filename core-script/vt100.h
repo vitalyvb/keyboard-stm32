@@ -24,37 +24,15 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef STRING_H
-#define STRING_H
+#ifndef VT100_H
+#define VT100_H
 
-#include <stddef.h>
-#include "defs.h"
+typedef void (*vt100_handler)(int chr);
 
-int memcmp(const void *m1, const void *m2, size_t n);
-void *memmove(void *dst_void, const void *src_void, size_t length);
+void vt100_init();
+void vt100_poll();
+void vt100_reset();
 
-/* arm-none-eabi-gcc-4.8.1 has some bug with cloning during -Os
- * optimization.
- *
- * Resulting object file fails to link with this error:
- *   whole_program.o: In function `terminal_move_cursor':
- *    libs/microrl/microrl.c:253: undefined reference to `memset'
- *
- * whole_program.o file has these symbols:
- *      U memset
- *      t memset.constprop.43
- *
- * Project compiles OK with a -O2.
- */
-void _NOCLONE_NOINLINE_ *memset(void *m, int c, size_t n);
+vt100_handler vt100_redirect(vt100_handler new_handler);
 
-#define memcpy(a,b,c) memmove(a,b,c)
-
-char* strcat(char *s1, const char *s2);
-char* strcpy(char *dst0, const char *src0);
-char* strncpy(char *dst0, const char *src0, size_t count);
-size_t strlen(const char *str);
-int strcmp(const char *s1, const char *s2);
-int strncmp(const char *s1, const char *s2, size_t n);
-
-#endif /* STRING_H */
+#endif /* VT100_H */

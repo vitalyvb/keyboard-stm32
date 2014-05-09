@@ -24,37 +24,30 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef STRING_H
-#define STRING_H
+#include "string.h"
 
-#include <stddef.h>
-#include "defs.h"
+#include "hw_config.h"
+#include "util.h"
+#include "usb_lib.h"
+#include "usb_istr.h"
 
-int memcmp(const void *m1, const void *m2, size_t n);
-void *memmove(void *dst_void, const void *src_void, size_t length);
+__IO uint8_t hid_ep_status[NUM_ENDPOINTS];
 
-/* arm-none-eabi-gcc-4.8.1 has some bug with cloning during -Os
- * optimization.
- *
- * Resulting object file fails to link with this error:
- *   whole_program.o: In function `terminal_move_cursor':
- *    libs/microrl/microrl.c:253: undefined reference to `memset'
- *
- * whole_program.o file has these symbols:
- *      U memset
- *      t memset.constprop.43
- *
- * Project compiles OK with a -O2.
- */
-void _NOCLONE_NOINLINE_ *memset(void *m, int c, size_t n);
+/***************************************************************************/
+/***************************************************************************/
 
-#define memcpy(a,b,c) memmove(a,b,c)
+void usb_ep_handlers_reset(void)
+{
+    atomic_memset((uint8_t*)hid_ep_status, 0, sizeof(hid_ep_status));
+}
 
-char* strcat(char *s1, const char *s2);
-char* strcpy(char *dst0, const char *src0);
-char* strncpy(char *dst0, const char *src0, size_t count);
-size_t strlen(const char *str);
-int strcmp(const char *s1, const char *s2);
-int strncmp(const char *s1, const char *s2, size_t n);
+/***************************************************************************/
+/***************************************************************************/
 
-#endif /* STRING_H */
+void EP1_IN_Callback(void)
+{
+    hid_ep_status[1] = HID_EP_IDLE;
+}
+
+/***************************************************************************/
+/***************************************************************************/
