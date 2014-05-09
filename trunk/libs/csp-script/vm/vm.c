@@ -538,8 +538,6 @@ static struct u_frame *find_loop_uframe(struct vm_frame *frame)
 
 /********************************************************/
 
-int vm_tsc;
-
 static int vm_execute(struct vm_frame *_frame, const uint8_t *code_start, int size)
 {
     const uint8_t *code;
@@ -555,7 +553,6 @@ static int vm_execute(struct vm_frame *_frame, const uint8_t *code_start, int si
 
 
     while (code < (code_start+size)) {
-	vm_tsc++;
 
 	if ((uint8_t*)&STACK_VAL(0) - vm->vm_buffer_end < STACK_GUARD_SIZE)
 	    return -CSP_ERR_STACK_OVERFLOW;

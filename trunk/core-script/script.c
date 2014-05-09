@@ -87,11 +87,11 @@ int csp_text_input_callback (char *buf, int max_size)
 	    load_script_eof = 1;
 	    break;
 	} else if (c >= 0) {
-	    console_usb_putchar(c);
 	    if (c == '\r'){
-		console_usb_putchar('\n');
+		console_usb_putchar(c);
 		c = '\n';
 	    }
+	    console_usb_putchar(c);
 
 	    buf[cnt++] = c;
 	    max_size--;
@@ -120,7 +120,7 @@ void load_script_from_console()
     if (res) {
 	do {
 	    /* repeat message periodically */
-	    Cprintf("\r\nError %d on line %d: %s\r\n", csp_errno, csp_errline, csp_errstr);
+	    Cprintf("\nError %d on line %d: %s\n", csp_errno, csp_errline, csp_errstr);
 	} while (wait_for_program_end());
 
 	return;
@@ -128,11 +128,11 @@ void load_script_from_console()
 
     program_size = csp_get_program_size(program_buffer, sizeof(program_buffer));
 
-    Cprintf("\r\nSuccess! Bytecode size %d\r\n", program_size);
+    Cprintf("\nSuccess! Bytecode size %d\n", program_size);
 
     res = csp_vm_load_program(program_buffer, program_size, 0);
     if (res){
-	Cprintf("\r\nError: program load error: %d\r\n", res);
+	Cprintf("\nError: program load error: %d\n", res);
     }
 }
 

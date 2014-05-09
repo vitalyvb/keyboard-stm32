@@ -179,8 +179,7 @@ static void __attribute__((__noinline__)) clear_memory()
 
     stack_pos -= 4; // just in case
     while (heap < stack_pos)
-//	*(heap++) = 0x41414141;
-	*(heap++) = 0;
+	*(heap++) = 0x41414141;
 }
 #endif
 

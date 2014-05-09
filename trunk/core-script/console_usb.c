@@ -361,6 +361,8 @@ void console_usb_init()
 
 static void console_putc(void *p, char c)
 {
+    if (unlikely(c == '\n'))
+	console_usb_putchar('\r');
     console_usb_putchar(c);
 }
 
