@@ -76,7 +76,7 @@ static int rlexecute (int argc, const char * const * argv)
     }
 
     if (!found){
-	Cprintf("Unknown command: %s\r\nType 'help' for help\r\n", argv[0]);
+	Cprintf("Unknown command: %s\nType 'help' for help\n", argv[0]);
     }
 
     return 0;
@@ -86,7 +86,7 @@ static int rlexecute (int argc, const char * const * argv)
 static void rlsigint (void)
 {
     // XXX todo: clear command line
-    rlprint("\r\nOuch! CTRL+C !\r\n");
+    rlprint("\nOuch! CTRL+C !\n");
 }
 
 /****************************************************************************/

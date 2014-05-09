@@ -34,11 +34,9 @@
 #include "shell.h"
 #include "script.h"
 
-extern int vm_tsc;
-
 static void cmd_info(int argc, const char * const * argv)
 {
-    Cprintf("hi\r\n");
+    Cprintf("hi\n");
 }
 
 static void cmd_exec(int argc, const char * const * argv)
@@ -54,7 +52,7 @@ static void cmd_exec(int argc, const char * const * argv)
 
     fidx = csp_vm_find_func(argv[0]);
     if (fidx < 0){
-	Cprintf("not found\r\n");
+	Cprintf("not found\n");
     }
 
     for (i=1;i<argc && i<CMD_EXEC_MAX_ARGS+1;i++){
@@ -65,12 +63,12 @@ static void cmd_exec(int argc, const char * const * argv)
     }
 
     exec_res = csp_vm_run_function(1000, fidx, argc-1, args);
-    Cprintf("\r\nexec %s(): %d %d tsc:%d\r\n", argv[0], exec_res, csp_vm_get_call_result(), vm_tsc);
+    Cprintf("\nexec %s(): %d %d\n", argv[0], exec_res, csp_vm_get_call_result());
 
     return;
 
 syntax_err:
-    Cprintf("Usage: exec <name> [args...]\r\n");
+    Cprintf("Usage: exec <name> [args...]\n");
 }
 
 
@@ -79,14 +77,14 @@ static void cmd_load(int argc, const char * const * argv)
     if (argc != 0)
 	goto syntax_err;
 
-    Cprintf("Expecting script code.\r\nEnd with a Ctrl+D (ASCII char code 4).\r\n");
+    Cprintf("Expecting script code.\nEnd with a Ctrl+D (ASCII char code 4).\n");
 
     load_script_from_console();
 
     return;
 
 syntax_err:
-    Cprintf("Usage: load\r\n");
+    Cprintf("Usage: load\n");
 }
 
 static void cmd_dumpmem(int argc, const char * const * argv)
@@ -117,7 +115,7 @@ static void cmd_dumpmem(int argc, const char * const * argv)
     idx = 0;
     while (size > 0){
 	if (idx == 0)
-	    Cprintf("\r\n%08x: ", ptr);
+	    Cprintf("\n%08x: ", ptr);
 
 	Cprintf("%02x ", *ptr++);
 
@@ -125,12 +123,12 @@ static void cmd_dumpmem(int argc, const char * const * argv)
 	size--;
     }
 
-    Cprintf("\r\n");
+    Cprintf("\n");
 
     return;
 
 syntax_err:
-    Cprintf("Usage: dumpmem <addr> <count>\r\n");
+    Cprintf("Usage: dumpmem <addr> <count>\n");
 }
 
 static void cmd_help(int argc, const char * const * argv)
@@ -138,10 +136,10 @@ static void cmd_help(int argc, const char * const * argv)
     const struct shell_command *cmd;
     int i;
 
-    Cprintf("Commands:\r\n");
+    Cprintf("Commands:\n");
     for (i=0;i<shell_commands_count;i++){
 	cmd = &shell_commands[i];
-	Cprintf("    %-16s - %s\r\n", cmd->name, cmd->descr);
+	Cprintf("    %-16s - %s\n", cmd->name, cmd->descr);
     }
 }
 
