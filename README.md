@@ -1,9 +1,15 @@
 # Inactive
 
-**Old description**
+USB keyboard controller firmware for STM32 microcontollers
 
-Project aims to implement a C-like language interpreter with small code and memory footprint for 32bit microcontrollers.
+**Old description:**
 
-At the time of writing, parser code size for Cortex-M3 is less than 10K and VM is less than 3K. RAM requirements mostly depend on code size and complexity, but few kilobytes should be enough to handle most reasonably simple cases.
+This is a USB keyboard controller firmware for STM32 contollers with USB-FS hardware (USB-OTG isn't supporter at the moment).
 
-Parser and VM are written with code size priority, not security. Project should not be used to run code (and bytecode) from untrusted sources.
+Primary development MCU is STM32F103, should be easy to port to STM32F102, STM32L1xx and STM32F3xx.
+
+There are two main parts: boot and core. Boot supports basic keyboard functionality and firmware upgrade via USB (DFU protocol). Cores provide advanced features.
+
+**Features:**
+* DFU firmware upgrade
+* ACM/CDC serial debug interface
